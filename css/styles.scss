@@ -1,0 +1,37 @@
+.action {
+    position: fixed;
+    z-index: 1;
+    padding: 20px;
+    font-size: 60px;
+    color: black;
+    border: 0;
+    background-color: transparent;
+    &__top-left {
+        top: 0;
+        left: 0;
+    }
+    &__top-right {
+        top: 0;
+        right: 0;
+    }
+    &__bottom-left {
+        bottom: 0;
+        left: 0;
+    }
+    &__bottom-right {
+        bottom: 0;
+        right: 0;
+    }
+}
+.final-list {
+    display: flex;
+    justify-content: space-around;
+    max-height: 500px;
+    overflow-x: scroll;
+    &__product-image {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+        /* padding-right: 50px; */
+    }
+}

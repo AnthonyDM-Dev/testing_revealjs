@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css">
+		<link rel="stylesheet" href="dist/styles.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<!-- Font awesome -->
+		<script src="https://kit.fontawesome.com/9a2c4fe4ba.js" crossorigin="anonymous"></script>
+		<script src="js/services.js"></script>
+	</head>
+	<body>
+		<div class="reveal">
+			<button class="action action__top-left" onclick="triggerOverview()">
+				<i class="fas fa-search-minus"></i>
+			</button>
+			<div class="action action__top-right" onclick="triggerSuggestedProducts()">
+				<i class="far fa-lightbulb"></i>
+			</div>
+			<div class="action action__bottom-left" onclick="toHomepage()">
+				<i class="fas fa-home"></i>
+			</div>
+			<!-- <div class="action action__bottom-right">
+				<i class="fas fa-search-minus"></i>
+			</div> -->
+			<div id="slides" class="slides">
+				<section>
+					<img src="static/logos/barilla.png" />
+					Sfoglia il catalogo
+				</section>
+				<section data-background-color="#dcebf3">
+					<section data-background-color="#dcebf3">
+						<img src="static/products/prosciutto1.png" />
+					</section>
+					<section data-background-color="#dcebf3">
+						<img src="static/products/prosciutto2.png" />
+					</section>
+				</section>
+				<section data-background-color="#dcebf3">
+					<section data-background-color="#dcebf3">
+						<img src="static/products/parmareggio1.png" />
+					</section>
+					<section data-background-color="#dcebf3">
+						<img src="static/products/parmareggio2.png" />
+					</section>
+				</section>
+				<section data-background-color="#dcebf3">
+					<section data-background-color="#dcebf3">
+						<img src="static/products/parmigiano1.png" />
+					</section>
+				</section>
+				<section data-background-color="#dcebf3">
+					<section data-background-color="#dcebf3">
+						<img src="static/products/snack1.png" />
+					</section>
+					<section data-background-color="#dcebf3">
+						<img src="static/products/snack2.png" />
+					</section>
+				</section>
+				<section data-background-color="#dcebf3">
+					<h1>Riepilogo preferenze</h1>
+					<div id="final-list" class="final-list">
+						<img class="final-list__product-image" src="static/products/prosciutto1.png" />
+						<img class="final-list__product-image" src="static/products/parmareggio2.png" />
+						<img class="final-list__product-image" src="static/products/parmigiano1.png" />
+						<img class="final-list__product-image" src="static/products/snack2.png" />
+					</div>
+				</section>
+				<section>
+					<h1>Sei arrivato alla fine!</h1>
+					Grazie per aver visionato il nostro catalogo.
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+		<script>
+			function toHomepage() {
+				window.location.href = '/#';
+			}
+			function triggerOverview() {
+				const targetEl = event.target.tagName === 'I' ? event.target : event.target.firstElementChild;
+				changeTargetClass(targetEl, 'fa-search-minus', 'fa-search-plus');
+				Reveal.toggleOverview(!Reveal.getState().overview);
+				if (Reveal.getState().overview) {
+					highlightCells(suggestedCells, '30px solid blue');
+				} else {
+					unlightCells(allCells, 'none');
+				}
+				return;
+			}
+			function changeTargetClass(el, firstClass, secondClass) {
+				const hasFirstClass = el.classList.contains(firstClass);
+				return hasFirstClass ? el.classList.replace(firstClass, secondClass) : el.classList.replace(secondClass, firstClass);
+			}
+			function getColSection(hCoord, slidesId) {
+				const div = document.getElementById(slidesId);
+				console.log('div: ', div.children[hCoord]);
+				return div.children[hCoord];
+			}
+			function getRowSection(colSection, vCoord, slidesId) {
+				return colSection.children[vCoord];
+			}
+			function highlightCells(coords, borderStyle) {
+				for (let i = 0; i < coords.length; i++) {
+					let colSection = getColSection(coords[i][0], 'slides');
+					let el = getRowSection(colSection, coords[i][1], 'slides');
+					el.style.border = borderStyle;
+				}
+			}
+			function unlightCells(coords, borderStyle) {
+				for (let i = 0; i < coords.length; i++) {
+					let colSection = getColSection(coords[i][0], 'slides');
+					let el = getRowSection(colSection, coords[i][1], 'slides');
+					el.style.border = borderStyle;
+				}
+			}
+			function triggerSuggestedProducts() {
+				const targetEl = event.target.tagName === 'I' ? event.target : event.target.firstElementChild;
+				changeTargetClass(targetEl, 'fas', 'far');
+				const hideUnsuggested = targetEl.classList.contains('fas');
+				for (let i = 0; i < allCells.length; i++) {
+					let colSection = getColSection(allCells[i][0], 'slides');
+					let el = getRowSection(colSection, allCells[i][1], 'slides');
+					console.log(suggestedCells, allCells[i], suggestedCells.includes(allCells[i]));
+					if (suggestedCells.includes(allCells[i])) {
+						el.style.display = 'none';
+					}
+				}
+			}
+			const allCells = [
+				[0,0], [1,0], [1,1], [2,0], [2,1], [3,0], [4,0], [4,1]
+			];
+			const suggestedCells = [
+				[1,0], [2,1], [3,0], [4,1]
+			];
+			const choiceHistory = [];
+			const choiceList = [];
+			Reveal.on( 'slidechanged', event => {
+				const coords = [event.indexh, event.indexv];
+				choiceHistory.push(coords);
+
+				const historyLen = choiceHistory.length;
+				const lastViewed = historyLen ? choiceHistory[historyLen - 1] : [0,0];
+				if (historyLen) {
+					if (coords[0] === lastViewed[0] && coords[1] === lastViewed[1]) {
+						
+					}
+				} else {
+					choiceList.push(coords);
+				}
+			} );
+		</script>
+	</body>
+</html>
